@@ -204,19 +204,62 @@
   display: flex;
   min-height: 69px;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   gap: 16px;
   padding: 14px 2px !important;
   border: 0 !important;
   background: transparent !important;
 }
 
+.todo-checkbox {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 18px;
+  margin: 0;
+  appearance: none;
+  border: 1.5px solid #cbd6cc;
+  border-radius: 5px;
+  background: #fff;
+  cursor: pointer;
+  transition: background 150ms ease, border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.todo-checkbox:hover:not(:disabled) {
+  border-color: #71977b;
+}
+
+.todo-checkbox:checked {
+  border-color: #315d4b;
+  background-color: #315d4b;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='white' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m3 8 3 3 7-7'/%3E%3C/svg%3E");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 13px;
+}
+
+.todo-checkbox:focus-visible {
+  outline: 0;
+  box-shadow: 0 0 0 3px rgb(83 131 91 / 18%);
+}
+
+.todo-checkbox:disabled {
+  cursor: wait;
+  opacity: .65;
+}
+
 .todo-task-text {
   min-width: 0;
+  flex: 1;
   overflow-wrap: anywhere;
   color: #39463e;
   font-size: 13px;
   line-height: 1.5;
+}
+
+.todo-task-completed {
+  color: #909a92;
+  text-decoration: line-through;
+  text-decoration-color: #bcc6bd;
 }
 
 .todo-status {
@@ -239,6 +282,16 @@
 
 .todo-status-complete .todo-status-dot {
   background: #71967a;
+}
+
+.todo-update-error {
+  margin: 14px 22px 0;
+  padding: 10px 12px;
+  border: 1px solid #f0d8d1;
+  border-radius: 7px;
+  background: #fdf5f2;
+  color: #a15f52;
+  font-size: 12px;
 }
 
 .add-todo-page,
@@ -412,6 +465,11 @@
 
   .todo-task-text {
     font-size: 12px;
+  }
+
+  .todo-update-error {
+    margin-right: 16px;
+    margin-left: 16px;
   }
 
   .add-todo-page,

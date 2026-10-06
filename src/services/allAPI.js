@@ -10,3 +10,6 @@ export const addTodoAPI=async(reqBody)=>{
 export const viewTodoAPI=async()=>{
     return await axiosInstance.get('/todos')
 }
+export const updateTodoAPI=async(id,reqBody)=>{
+    return await axiosInstance.put(`/todos/${id}`,reqBody)
+}

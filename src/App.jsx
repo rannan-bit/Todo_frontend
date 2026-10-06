@@ -16,7 +16,7 @@ function App() {
     <>
     <Header/>
     <Routes>
-      <Route path='/todos' element={<Todo/>}/>
+      <Route path='/' element={<Todo/>}/>
       <Route path='/add-todo' element={<Addtodo/>}/>
       <Route path='/edit-todo/:id' element={<Edittodo/>}/>
     </Routes>

@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
-import { viewTodoAPI } from '../services/allAPI';
+import { updateTodoAPI, viewTodoAPI } from '../services/allAPI';
 
 function Todo() {
     const [todos, setTodos] = useState([])
+    const [updatingIds, setUpdatingIds] = useState([])
+    const [updateError, setUpdateError] = useState('')
+
     useEffect(() => {
         getTodo()
     }, [])
@@ -16,6 +19,26 @@ function Todo() {
         } catch (error) {
             console.log(error);
 
+        }
+    }
+
+    const toggleCompleted = async (todo) => {
+        setUpdateError('')
+        setUpdatingIds((ids) => [...ids, todo.id])
+
+        try {
+            const response = await updateTodoAPI(todo.id, {
+                ...todo,
+                completed: !todo.completed
+            })
+            setTodos((currentTodos) => currentTodos.map((item) =>
+                item.id === todo.id ? response.data : item
+            ))
+        } catch (error) {
+            console.log(error)
+            setUpdateError('Could not update the task. Please try again.')
+        } finally {
+            setUpdatingIds((ids) => ids.filter((id) => id !== todo.id))
         }
     }
 
@@ -35,14 +58,23 @@ function Todo() {
                         <h2>Your tasks</h2>
                         <span>{todos.length} {todos.length === 1 ? 'task' : 'tasks'}</span>
                     </div>
+                    {updateError && <p className='todo-update-error' role='alert'>{updateError}</p>}
                     <div className='todo-list'>
                 {
                     todos.map((a) => {
 
-                        return (<Card className='todo-card'>
+                        return (<Card className='todo-card' key={a.id}>
                             <ListGroup variant="flush">
                                 <ListGroup.Item className='todo-card-content'>
-                                    <span className='todo-task-text'>{a.text}</span>
+                                    <input
+                                        aria-label={`Mark "${a.text}" as ${a.completed ? 'pending' : 'completed'}`}
+                                        checked={Boolean(a.completed)}
+                                        className='todo-checkbox'
+                                        disabled={updatingIds.includes(a.id)}
+                                        onChange={() => toggleCompleted(a)}
+                                        type='checkbox'
+                                    />
+                                    <span className={`todo-task-text${a.completed ? ' todo-task-completed' : ''}`}>{a.text}</span>
                                     <span className={`todo-status ${a.completed ? 'todo-status-complete' : 'todo-status-pending'}`}>
                                         <span className='todo-status-dot' aria-hidden='true' />
                                         {a.completed ? "completed" : "pending"}
